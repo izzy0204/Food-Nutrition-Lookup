@@ -1,0 +1,17 @@
+#ifndef PROJECT2B_CLI_H
+#define PROJECT2B_CLI_H
+
+#include <vector>
+#include "FoodItem.h"
+using namespace std;
+
+void displayMenu();
+void searchByName(const vector<FoodItem>& foods);
+void filterByNutrition(const vector<FoodItem>& foods);
+void excludeIngredient(const vector<FoodItem>& foods);
+void allergenFilter(const vector<FoodItem>& foods);
+void buildMeal(const vector<FoodItem>& foods);
+void compareDataStructures();
+void runCLI(vector<FoodItem>& foods);
+
+#endif
