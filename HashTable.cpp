@@ -24,8 +24,12 @@ void HashTable::clearOut() {
     keys = 0;
 }
 
+//code taken from CLI.cpp
 std::string HashTable::lowerCase(const std::string& str) {
-    //finsih later
+    std::string res = str;
+    transform(res.begin(), res.end(), res.begin(),
+                   [](unsigned char c) { return static_cast<char>(std::tolower(c)); });
+    return res;
 }
 
 
@@ -40,7 +44,7 @@ std::size_t HashTable::hashFunction(const std::string& key) {
     return hash % buckets.size();
 }
 
-double HashTable::loadFactor() {
+double HashTable::loadFactor() const{
     if (buckets.empty()) {
         return 0.0;
     }
@@ -51,7 +55,7 @@ double HashTable::loadFactor() {
 void HashTable::rehash() {
     std::vector<Node*> temp = buckets;
     buckets.resize(2 * buckets.size());
-    for (size_t i = 0; i < buckets.size() * 2; i++) {
+    for (size_t i = 0; i < buckets.size(); i++) {
         buckets[i] = nullptr;
     }
 
@@ -67,6 +71,76 @@ void HashTable::rehash() {
             head = nextNode;
         }
     }
+}
+
+// used insert function here for inspiration: https://www.geeksforgeeks.org/dsa/implementation-of-hash-table-in-c-using-separate-chaining/
+void HashTable::insert(const std::string& key, const FoodItem* food) {
+    if (food == nullptr) {
+        return;
+    }
+    std::string lowerKey = lowerCase(key);
+    std::size_t bucketIndex = hashFunction(lowerKey);
+
+    Node* head = buckets[bucketIndex];
+    while (head != nullptr) {
+        if (head->key == lowerKey) {
+            head->values.push_back(food);
+            return;
+        }
+        head = head->next;
+    }
+    Node* newNode = new Node(lowerKey, food);
+    if (buckets[bucketIndex] == nullptr) {
+        buckets[bucketIndex] = newNode;
+    }
+    else {
+        newNode->next = buckets[bucketIndex];
+        buckets[bucketIndex] = newNode;
+    }
+    keys++;
+    
+    //Decided on keeping a max load factor of 0.8 like mentioned in lectures
+    if (loadFactor() > 0.8) {
+        rehash();
+    }
+}
+
+std::vector<const FoodItem*> HashTable::find(const std::string& key) {
+    if (buckets.empty()) {
+        return {};
+    }
+    std::string lowerKey = lowerCase(key);
+    std::size_t bucketIndex = hashFunction(lowerKey);
+
+    Node* head = buckets[bucketIndex];
+
+    while (head != nullptr) {
+        if (head->key == lowerKey) {
+            return head->values;
+        }
+        head = head->next;
+    }
+    return {};
+}
+
+void HashTable::buildFromFoods(const std::vector<FoodItem>& foods) {
+    for (const auto& food : foods) {
+        if (food.name.empty() == false) {
+            insert(food.name, &food);
+        }
+    }
+}
+
+size_t HashTable::size() {
+    return keys;
+}
+
+size_t HashTable::bucket_count() {
+    return buckets.size();
+}
+
+bool HashTable::empty() {
+    return size() == 0;
 }
 
 

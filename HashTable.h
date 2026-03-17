@@ -1,11 +1,16 @@
+#include <string>
+#include <cstddef>
+#include <vector>
+#include "FoodItem.h"
+
 class HashTable {
     private:
     struct Node {
         std::string key;
-        std::vector<FoodItem*> values;
+        std::vector<const FoodItem*> values;
         Node* next;
 
-        Node(const std::string& key, const FoodItem* food) : key(key), values{food}, next(nullptr)
+        Node(const std::string& key, const FoodItem* food) : key(key), values{food}, next(nullptr) {}
     };
 
     std::vector<Node*> buckets;
@@ -33,5 +38,4 @@ class HashTable {
     size_t size();
     size_t bucket_count();
     bool empty();
-
-}
+};
