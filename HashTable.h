@@ -13,7 +13,7 @@ class HashTable {
 
     double loadFactor() const;
     void rehash();
-    void clear();
+    void clearOut();
 
     std::size_t hashFunction(const std::string& key);
     std::string lowerCase(const std::string& str);
