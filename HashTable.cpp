@@ -18,13 +18,13 @@ void HashTable::clearOut() {
     }
 
     for (size_t i = 0; i < buckets.size(); i++) {
-        buckets[i] = nullptr
+        buckets[i] = nullptr;
     }
 
     keys = 0;
 }
 
-std::string HashTable:lowerCase(const string& str) {
+std::string HashTable::lowerCase(const std::string& str) {
     //finsih later
 }
 
@@ -50,8 +50,8 @@ double HashTable::loadFactor() {
 //used this for implementation of rehash: https://www.geeksforgeeks.org/dsa/load-factor-and-rehashing/
 void HashTable::rehash() {
     std::vector<Node*> temp = buckets;
-    buckets.resize(2 * firstBucketCount);
-    for (size_t i = 0; i < firstBucketCount * 2; i++) {
+    buckets.resize(2 * buckets.size());
+    for (size_t i = 0; i < buckets.size() * 2; i++) {
         buckets[i] = nullptr;
     }
 
@@ -59,7 +59,7 @@ void HashTable::rehash() {
     for (size_t i = 0; i < temp.size(); i++) {
         Node* head = temp[i];
         while (head != nullptr) {
-            for (FoodItem* food : head->values) {
+            for (const FoodItem* food : head->values) {
                 insert(head->key, food); // not yet implemented
             }
             Node* nextNode = head->next;
