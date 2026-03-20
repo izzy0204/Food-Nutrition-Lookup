@@ -15,11 +15,12 @@ static string toLowerCase(string text) {
 static void printFood(const FoodItem& food) {
     cout << "\nName: " << food.name;
     cout << "\nType: " << food.type;
-    cout << "\nCalories: " << food.calories;
-    cout << "\nProtein: " << food.protein;
-    cout << "\nCarbs: " << food.carbs;
-    cout << "\nFat: " << food.fat;
-    cout << "\nSodium: " << food.sodium << "\n";
+    cout << "\nCalories: " << food.calories << " calories";
+    cout << "\nProtein: " << food.protein << "g";
+    cout << "\nCarbs: " << food.carbs << "g";
+    cout << "\nFat: " << food.fat << "g";
+    cout << "\nSodium: " << food.sodium << "mg";
+    cout << "\nSugar: " << food.sugar << "g" << endl;
 }
 
 void displayMenu() {
@@ -63,19 +64,23 @@ void searchByName(const vector<FoodItem>& foods) {
 }
 
 void filterByNutrition(const vector<FoodItem>& foods) {
-    double maxCalories, minProtein, maxCarbs, maxSodium;
+    double maxCalories, minProtein, maxCarbs, maxSodium, maxSugar;
 
     cout << "\nEnter maximum calories: ";
     cin >> maxCalories;
 
-    cout << "Enter minimum protein: ";
+    cout << "Enter minimum protein (in grams): ";
     cin >> minProtein;
 
-    cout << "Enter maximum carbs: ";
+    cout << "Enter maximum carbs (in grams): ";
     cin >> maxCarbs;
 
-    cout << "Enter maximum sodium: ";
+    cout << "Enter maximum sodium (in milligrams): ";
     cin >> maxSodium;
+
+    cout << "Enter maximum sugar (in grams): ";
+    cin >> maxSugar;
+
 
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
@@ -85,7 +90,8 @@ void filterByNutrition(const vector<FoodItem>& foods) {
         if (food.calories <= maxCalories &&
             food.protein >= minProtein &&
             food.carbs <= maxCarbs &&
-            food.sodium <= maxSodium) {
+            food.sodium <= maxSodium &&
+            food.sugar >= maxSugar){
 
             printFood(food);
             results++;
@@ -121,11 +127,12 @@ void excludeIngredient(const vector<FoodItem>& foods) {
             cout << "\nName: " << food.name;
             cout << "\nType: " << food.type;
             cout << "\nIngredients: " << food.ingredients;
-            cout << "\nCalories: " << food.calories;
-            cout << "\nProtein: " << food.protein;
-            cout << "\nCarbs: " << food.carbs;
-            cout << "\nFat: " << food.fat;
-            cout << "\nSodium: " << food.sodium << "\n";
+            cout << "\nCalories: " << food.calories << " calories";
+            cout << "\nProtein: " << food.protein << "g";
+            cout << "\nCarbs: " << food.carbs << "g";
+            cout << "\nFat: " << food.fat << "g";
+            cout << "\nSodium: " << food.sodium << "mg";
+            cout << "\nSugar: " << food.sugar << "g" << endl;
 
             results++;
             if (results == 10) {
@@ -147,7 +154,7 @@ void allergenFilter(const vector<FoodItem>& foods) {
         {2, {"egg", "eggs", "albumin"}},
         {3, {"peanut", "groundnut"}},
         {4, {"soy", "soya", "soybean", "soy lecithin"}},
-        {5, {"wheat", "gluten", "flour"}},
+        {5, {"wheat", "gluten", "flour", "soy sauce"}},
         {6, {"tree nut", "almond", "cashew", "walnut", "pecan", "pistachio", "hazelnut"}}
     };
 
@@ -189,11 +196,12 @@ void allergenFilter(const vector<FoodItem>& foods) {
         if (!containsAllergen) {
             cout << "\nName: " << food.name;
             cout << "\nIngredients: " << food.ingredients;
-            cout << "\nCalories: " << food.calories;
-            cout << "\nProtein: " << food.protein;
-            cout << "\nCarbs: " << food.carbs;
-            cout << "\nFat: " << food.fat;
-            cout << "\nSodium: " << food.sodium << "\n";
+            cout << "\nCalories: " << food.calories << " calories";
+            cout << "\nProtein: " << food.protein << "g";
+            cout << "\nCarbs: " << food.carbs << "g";
+            cout << "\nFat: " << food.fat << "g";
+            cout << "\nSodium: " << food.sodium << "mg";
+            cout << "\nSugar: " << food.sugar << "g" << endl;
 
             results++;
             if (results == 10) {
@@ -210,20 +218,23 @@ void allergenFilter(const vector<FoodItem>& foods) {
 }
 
 void buildMeal(const vector<FoodItem>& foods) {
-    double maxCalories, minProtein, maxCarbs, maxSodium;
+    double maxCalories, minProtein, maxCarbs, maxSodium, maxSugar;
 
     cout << "\nBuild a simple meal (protein + base + side).\n";
     cout << "Enter maximum total calories: ";
     cin >> maxCalories;
 
-    cout << "Enter minimum total protein: ";
+    cout << "Enter minimum total protein (in grams): ";
     cin >> minProtein;
 
-    cout << "Enter maximum total carbs: ";
+    cout << "Enter maximum total carbs (in grams): ";
     cin >> maxCarbs;
 
-    cout << "Enter maximum total sodium: ";
+    cout << "Enter maximum total sodium (in milligrams): ";
     cin >> maxSodium;
+
+    cout << "Enter maximum total sugar (in grams): ";
+    cin >>  maxSugar;
 
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
@@ -291,20 +302,23 @@ void buildMeal(const vector<FoodItem>& foods) {
                 double totalProtein = protein->protein + base->protein + side->protein;
                 double totalCarbs = protein->carbs + base->carbs + side->carbs;
                 double totalSodium = protein->sodium + base->sodium + side->sodium;
+                double totalSugar = protein->sugar + base->sugar + side->sugar;
 
                 if (totalCalories <= maxCalories &&
                     totalProtein >= minProtein &&
                     totalCarbs <= maxCarbs &&
-                    totalSodium <= maxSodium) {
+                    totalSodium <= maxSodium &&
+                    totalSugar <= maxSugar) {
 
                     cout << "\nMeal Option " << mealsFound + 1 << ":\n";
                     cout << "Protein: " << protein->name << "\n";
                     cout << "Base: " << base->name << "\n";
                     cout << "Side: " << side->name << "\n";
-                    cout << "Total Calories: " << totalCalories << "\n";
-                    cout << "Total Protein: " << totalProtein << "\n";
-                    cout << "Total Carbs: " << totalCarbs << "\n";
-                    cout << "Total Sodium: " << totalSodium << "\n";
+                    cout << "Total Calories: " << totalCalories << " calories" << "\n";
+                    cout << "Total Protein: " << totalProtein << "g" << "\n";
+                    cout << "Total Carbs: " << totalCarbs << "g" << "\n";
+                    cout << "Total Sodium: " << totalSodium << "mg" << "\n";
+                    cout << "Total Sugar: " << totalSugar << "g" << "\n";
 
                     mealsFound++;
                     if (mealsFound == 5) {
@@ -360,7 +374,10 @@ void runCLI(vector<FoodItem>& foods) {
             cout << "Goodbye\n";
         }
         else {
-            cout << "Invalid choice\n";
+            cout << "Invalid choice. Please enter a number between 1 to 8." << endl;
+            cout<< "If menu is not displaying, press enter.\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
     }
 }

@@ -9,5 +9,6 @@ int main() {
     cout << "Loaded " << foods.size() << " foods.\n";
 
     runCLI(foods);
+    //printSampleFoods(foods,5);
     return 0;
 }

@@ -67,6 +67,7 @@ FoodItem buildFoodItem(const vector<string>& columns) {
     food.carbs = extractNutrient(nutrition, "carbohydrates");
     food.fat = extractNutrient(nutrition, "total_fat");
     food.sodium = extractNutrient(nutrition, "sodium");
+    food.sugar = extractNutrient(nutrition, "total_sugars");
 
     return food;
 }
@@ -112,10 +113,11 @@ void printSampleFoods(const vector<FoodItem>& foods, int count) {
     for (int i = 0; i < count && i < static_cast<int>(foods.size()); i++) {
         cout << "\nFood " << i + 1 << "\n";
         cout << "Name: " << foods[i].name << "\n";
-        cout << "Calories: " << foods[i].calories << "\n";
-        cout << "Protein: " << foods[i].protein << "\n";
-        cout << "Carbs: " << foods[i].carbs << "\n";
-        cout << "Fat: " << foods[i].fat << "\n";
-        cout << "Sodium: " << foods[i].sodium << "\n";
+        cout << "Calories: " << foods[i].calories << " calories" <<"\n";
+        cout << "Protein: " << foods[i].protein << "g" << "\n";
+        cout << "Carbs: " << foods[i].carbs << "g" << "\n";
+        cout << "Fat: " << foods[i].fat << "g" << "\n";
+        cout << "Sodium: " << foods[i].sodium << "mg" << "\n";
+        cout << "Sugar: " << foods[i].sugar << "g" << "\n";
     }
 }

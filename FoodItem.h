@@ -17,6 +17,7 @@ struct FoodItem {
     double carbs = 0.0;
     double fat = 0.0;
     double sodium = 0.0;
+    double sugar = 0.0;
 };
 
 #endif
