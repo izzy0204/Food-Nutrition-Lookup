@@ -106,3 +106,139 @@ void RBT::insert(const string& key, const FoodItem* food) {
     fixInsert(newNode);
     nodeCount++;
 }
+/*===========================ROTATIONS/FIXES================================ */
+//NOTE: THE CODE FOR THE ROTATION/INSERTION FIXES ARE OBTAINED HERE:
+//https://github.com/yassiommi/redblacktree/blob/main/RedBlackTree.h
+//Additional Source of RBT: https://www.delftstack.com/howto/cpp/red-black-tree-cpp/
+//Slight modification, but code is mostly from those 2 sites.
+void RBT::leftRotate(Node* x) {
+    if (x == nullptr || x->right == nullptr) {
+        return;
+    }
+
+    Node* y = x->right;
+    x->right = y->left;
+
+    if (y->left != nullptr) {
+        y->left->parent = x;
+    }
+
+    y->parent = x->parent;
+
+    if (x->parent == nullptr) {
+        root = y;
+    }
+    else if (x == x->parent->left) {
+        x->parent->left = y;
+    }
+    else {
+        x->parent->right = y;
+    }
+
+    y->left = x;
+    x->parent = y;
+}
+
+void RBT::rightRotate(Node* y) {
+    if (y == nullptr || y->left == nullptr) {
+        return;
+    }
+
+    Node* x = y->left;
+    y->left = x->right;
+
+    if (x->right != nullptr) {
+        x->right->parent = y;
+    }
+
+    x->parent = y->parent;
+
+    if (y->parent == nullptr) {
+        root = x;
+    }
+    else if (y == y->parent->left) {
+        y->parent->left = x;
+    }
+    else {
+        y->parent->right = x;
+    }
+
+    x->right = y;
+    y->parent = x;
+}
+
+void RBT::fixInsert(Node* z) {
+    while (z != root && z->parent != nullptr && z->parent->color == RED) {
+        Node* parent = z->parent;
+        Node* grandparent = parent->parent;
+
+        if (grandparent == nullptr) {
+            break;
+        }
+
+        // parent is left child of grandparent
+        if (parent == grandparent->left) {
+            Node* uncle = grandparent->right;
+
+            // Case 1: uncle is red
+            if (uncle != nullptr && uncle->color == RED) {
+                parent->color = BLACK;
+                uncle->color = BLACK;
+                grandparent->color = RED;
+                z = grandparent;
+            }
+            else {
+                // Case 2: z is right child
+                if (z == parent->right) {
+                    z = parent;
+                    leftRotate(z);
+                    parent = z->parent;
+                    grandparent = parent != nullptr ? parent->parent : nullptr;
+                }
+
+                // Case 3: z is left child
+                if (parent != nullptr) {
+                    parent->color = BLACK;
+                }
+                if (grandparent != nullptr) {
+                    grandparent->color = RED;
+                    rightRotate(grandparent);
+                }
+            }
+        }
+        // parent is right child of grandparent
+        else {
+            Node* uncle = grandparent->left;
+
+            // Case 1: uncle is red
+            if (uncle != nullptr && uncle->color == RED) {
+                parent->color = BLACK;
+                uncle->color = BLACK;
+                grandparent->color = RED;
+                z = grandparent;
+            }
+            else {
+                // Case 2: z is left child
+                if (z == parent->left) {
+                    z = parent;
+                    rightRotate(z);
+                    parent = z->parent;
+                    grandparent = parent != nullptr ? parent->parent : nullptr;
+                }
+
+                // Case 3: z is right child
+                if (parent != nullptr) {
+                    parent->color = BLACK;
+                }
+                if (grandparent != nullptr) {
+                    grandparent->color = RED;
+                    leftRotate(grandparent);
+                }
+            }
+        }
+    }
+
+    if (root != nullptr) {
+        root->color = BLACK;
+    }
+}
