@@ -20,8 +20,7 @@ class RBT {
             Node* right;
             Node* parent;
 
-            Node(const string& key, const FoodItem* food)
-                : key(key), values{food}, color(RED),
+            Node(const string& key, const FoodItem* food): key(key), values{food}, color(RED),
                   left(nullptr), right(nullptr), parent(nullptr) {}
         };
 
@@ -34,7 +33,7 @@ class RBT {
         void rightRotate(Node* y);
         void fixInsert(Node* z);
 
-        Node* findNode(const string& key) const;
+        Node* findNodeHelper(const string& key) const;
         void clear(Node* node);
 
     public:
