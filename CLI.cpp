@@ -1,10 +1,14 @@
 #include "CLI.h"
+#include "RBT.h"
+#include "HashTable.h"
 #include <iostream>
 #include <algorithm>
 #include <limits>
 #include <map>
 #include <vector>
+#include <chrono>
 using namespace std;
+using namespace chrono;
 
 static string toLowerCase(string text) {
     transform(text.begin(), text.end(), text.begin(),
@@ -335,9 +339,53 @@ void buildMeal(const vector<FoodItem>& foods) {
     }
 }
 
-void compareDataStructures() {
-    cout << "\nThis feature will compare Hash Table and Red-Black Tree performance\n";
-    cout << "for the same query once both structures are integrated.\n";
+
+//Source: Execution time code from: https://www.geeksforgeeks.org/cpp/measure-execution-time-function-cpp/
+void compareDataStructures(const vector<FoodItem>& foods) {
+    string query;
+    cout << "Enter exact food name to compare lookup performance: ";
+    getline(cin, query);
+
+    HashTable hashTable;
+    RBT rbt;
+
+    auto hashBuildStart = high_resolution_clock::now();
+    hashTable.buildFromFoods(foods);
+    auto hashBuildEnd = high_resolution_clock::now();
+
+    auto rbtBuildStart = high_resolution_clock::now();
+    rbt.buildFromFoods(foods);
+    auto rbtBuildEnd = high_resolution_clock::now();
+
+    auto hashSearchStart = high_resolution_clock::now();
+    vector<const FoodItem*> hashResults = hashTable.find(query);
+    auto hashSearchEnd = high_resolution_clock::now();
+
+    auto rbtSearchStart = high_resolution_clock::now();
+    vector<const FoodItem*> rbtResults = rbt.find(query);
+    auto rbtSearchEnd = high_resolution_clock::now();
+
+    auto hashBuildTime = duration_cast<milliseconds>(hashBuildEnd - hashBuildStart).count();
+    auto rbtBuildTime = duration_cast<milliseconds>(rbtBuildEnd - rbtBuildStart).count();
+    //nanoseconds needs to be used. milliseconds will end up showing 0 for both.
+    auto hashSearchTime = duration_cast<nanoseconds>(hashSearchEnd - hashSearchStart).count();
+    auto rbtSearchTime = duration_cast<nanoseconds>(rbtSearchEnd - rbtSearchStart).count();
+
+
+    cout << "=== Data Structure Comparison ===\n";
+    cout << "Dataset: # of rows loaded from dataset: " << foods.size() << endl;
+    cout << "RBT: # of nodes: " << rbt.size() << endl;
+    cout << "Hashtable: # of unique names: " << hashTable.size() << endl;
+    cout << "Exact query: " << query << "\n";
+
+    cout << "Hash Table build time: " << hashBuildTime << " ms\n";
+    cout << "Red-Black Tree build time: " << rbtBuildTime << " ms\n" << endl;
+
+    cout << "Hash Table search time: " << hashSearchTime << " ns\n";
+    cout << "Red-Black Tree search time: " << rbtSearchTime << " ns\n" << endl;
+
+    cout << "Hash Table matches found: " << hashResults.size() << "\n";
+    cout << "Red-Black Tree matches found: " << rbtResults.size() << "\n" << endl;;
 }
 
 void runCLI(vector<FoodItem>& foods) {
@@ -368,7 +416,7 @@ void runCLI(vector<FoodItem>& foods) {
             buildMeal(foods);
         }
         else if (choice == 7) {
-            compareDataStructures();
+            compareDataStructures(foods);
         }
         else if (choice == 8) {
             cout << "Goodbye\n";
