@@ -95,7 +95,7 @@ void filterByNutrition(const vector<FoodItem>& foods) {
             food.protein >= minProtein &&
             food.carbs <= maxCarbs &&
             food.sodium <= maxSodium &&
-            food.sugar >= maxSugar){
+            food.sugar <= maxSugar){
 
             printFood(food);
             results++;
@@ -367,25 +367,29 @@ void compareDataStructures(const vector<FoodItem>& foods) {
 
     auto hashBuildTime = duration_cast<milliseconds>(hashBuildEnd - hashBuildStart).count();
     auto rbtBuildTime = duration_cast<milliseconds>(rbtBuildEnd - rbtBuildStart).count();
+
     //nanoseconds needs to be used. milliseconds will end up showing 0 for both.
     auto hashSearchTime = duration_cast<nanoseconds>(hashSearchEnd - hashSearchStart).count();
     auto rbtSearchTime = duration_cast<nanoseconds>(rbtSearchEnd - rbtSearchStart).count();
-
 
     cout << "=== Data Structure Comparison ===\n";
     cout << "Dataset: # of rows loaded from dataset: " << foods.size() << endl;
     cout << "RBT: # of nodes: " << rbt.size() << endl;
     cout << "Hashtable: # of unique names: " << hashTable.size() << endl;
+    cout << "Hashtable: # of buckets: " << hashTable.bucket_count() << endl;
     cout << "Exact query: " << query << "\n";
 
+    cout << "--- Build Times --- \n";
     cout << "Hash Table build time: " << hashBuildTime << " ms\n";
     cout << "Red-Black Tree build time: " << rbtBuildTime << " ms\n" << endl;
 
+    cout << "--- Search Times --- \n";
     cout << "Hash Table search time: " << hashSearchTime << " ns\n";
     cout << "Red-Black Tree search time: " << rbtSearchTime << " ns\n" << endl;
 
+    cout << "--- Match Counts ---\n";
     cout << "Hash Table matches found: " << hashResults.size() << "\n";
-    cout << "Red-Black Tree matches found: " << rbtResults.size() << "\n" << endl;;
+    cout << "Red-Black Tree matches found: " << rbtResults.size() << "\n" << endl;
 }
 
 void runCLI(vector<FoodItem>& foods) {
