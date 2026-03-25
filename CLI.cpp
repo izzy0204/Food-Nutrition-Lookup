@@ -40,31 +40,40 @@ void displayMenu() {
     cout << "Enter choice: ";
 }
 
-void searchByName(const vector<FoodItem>& foods) {
+void searchByName(HashTable& ht, RBT& rbt) {
     string query;
     cout << "\nEnter food name keyword: ";
     getline(cin, query);
 
-    query = toLowerCase(query);
-    int results = 0;
+    auto hashStart = high_resolution_clock::now();
+    vector<const FoodItem*> hashResults = ht.find(query);
+    auto hashEnd = high_resolution_clock::now();
 
-    for (const auto& food : foods) {
-        string name = toLowerCase(food.name);
+    auto rbtStart = high_resolution_clock::now();
+    vector<const FoodItem*> rbtResults = rbt.find(query);
+    auto rbtEnd = high_resolution_clock::now();
 
-        if (name.find(query) != string::npos) {
-            printFood(food);
-            results++;
-            if (results == 10) {
-                break;
-            }
-        }
+    auto hashSearchTime = duration_cast<nanoseconds>(hashEnd - hashStart).count();
+    auto rbtSearchTime = duration_cast<nanoseconds>(rbtEnd - rbtStart).count();
+
+    cout << "=== Name Search Comparison in RBT and HashTable ===\n";
+    cout << "Exact Query: " << query << "\n";
+    cout << "HashTable search time: " << hashSearchTime << " nanoseconds.\n";
+    cout << "Red-Black Tree search time: " << rbtSearchTime << " nanoseconds.\n";
+    cout << " " << endl;
+    cout << "HashTable matches: " << hashResults.size() << "\n";
+    cout << "Red-Black Tree matches: " << rbtResults.size() << "\n";
+    cout << "Same Number of Matches: " << (hashResults.size() == rbtResults.size() ? "Yes" : "No") << "\n";
+    cout << " " << endl;
+    cout << "Results: " << "\n";
+    int blocker = 0;
+    for (const auto* food : hashResults) {
+        printFood(*food);
+        blocker++;
+        if (blocker == 20) break;
     }
-
-    if (results == 0) {
-        cout << "\nNo foods found.\n";
-    } else {
-        cout << "\nDisplayed " << results << " result(s).\n";
-    }
+    if (blocker == 0) cout << "No foods found.";
+    else cout << "Displayed " << blocker << " results.\n";
 }
 
 void filterByNutrition(const vector<FoodItem>& foods) {
