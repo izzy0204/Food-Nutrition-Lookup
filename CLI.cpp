@@ -401,7 +401,7 @@ void compareDataStructures(const vector<FoodItem>& foods) {
     cout << "Red-Black Tree matches found: " << rbtResults.size() << "\n" << endl;
 }
 
-void runCLI(vector<FoodItem>& foods) {
+void runCLI(vector<FoodItem>& foods, HashTable& ht, RBT& rbt) {
     int choice = 0;
 
     while (choice != 8) {
@@ -414,7 +414,7 @@ void runCLI(vector<FoodItem>& foods) {
             cout << "Total foods available: " << foods.size() << "\n";
         }
         else if (choice == 2) {
-            searchByName(foods);
+            searchByName(ht, rbt);
         }
         else if (choice == 3) {
             filterByNutrition(foods);

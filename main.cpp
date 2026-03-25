@@ -8,7 +8,13 @@ int main() {
 
     cout << "Loaded " << foods.size() << " foods.\n";
 
-    runCLI(foods);
-    //printSampleFoods(foods,5);
+    HashTable ht;
+    ht.buildFromFoods(foods);
+
+    RBT rbt;
+    rbt.buildFromFoods(foods);
+
+    runCLI(foods, ht, rbt);
+    
     return 0;
 }
