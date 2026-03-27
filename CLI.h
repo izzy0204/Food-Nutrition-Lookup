@@ -3,9 +3,10 @@
 
 #include <vector>
 #include "FoodItem.h"
-#include "RBT.h"
-#include "HashTable.h"
-using namespace std;
+
+class HashTable;
+class RBT;
+
 
 void displayMenu();
 void searchByName(HashTable& ht, RBT& rbt);
@@ -14,6 +15,7 @@ void excludeIngredient(const vector<FoodItem>& foods);
 void allergenFilter(const vector<FoodItem>& foods);
 void buildMeal(const vector<FoodItem>& foods);
 void compareDataStructures(const vector<FoodItem>& foods);
+void compareRepeatedLookups(const std::vector<FoodItem>& foods);
 void runCLI(vector<FoodItem>& foods, HashTable& ht, RBT& rbt);
 
 #endif

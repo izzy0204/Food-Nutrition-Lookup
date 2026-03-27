@@ -36,7 +36,8 @@ void displayMenu() {
     cout << "5. Filter by allergen\n";
     cout << "6. Build simple meal\n";
     cout << "7. Compare data structures\n";
-    cout << "8. Exit\n";
+    cout << "8. Compare repeated lookups (average search time)\n";
+    cout << "9. Exit\n";
     cout << "Enter choice: ";
 }
 
@@ -401,10 +402,94 @@ void compareDataStructures(const vector<FoodItem>& foods) {
     cout << "Red-Black Tree matches found: " << rbtResults.size() << "\n" << endl;
 }
 
+void compareRepeatedLookups(const vector<FoodItem>& foods) {
+    string query;
+    cout << "Enter exact food name to compare repeated lookup performance: ";
+    getline(cin, query);
+
+    int repetitions;
+    cout << "Enter number of repeated lookups: ";
+    while (!(cin >> repetitions) || repetitions <= 0) {
+        cout << "Invalid input. Please enter a positive integer: ";
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    HashTable hashTable;
+    RBT rbt;
+
+    auto hashBuildStart = high_resolution_clock::now();
+    hashTable.buildFromFoods(foods);
+    auto hashBuildEnd = high_resolution_clock::now();
+
+    auto rbtBuildStart = high_resolution_clock::now();
+    rbt.buildFromFoods(foods);
+    auto rbtBuildEnd = high_resolution_clock::now();
+
+    vector<const FoodItem*> hashResults;
+    vector<const FoodItem*> rbtResults;
+
+    auto hashSearchStart = high_resolution_clock::now();
+    for (int i = 0; i < repetitions; i++) {
+        hashResults = hashTable.find(query);
+    }
+    auto hashSearchEnd = high_resolution_clock::now();
+
+    auto rbtSearchStart = high_resolution_clock::now();
+    for (int i = 0; i < repetitions; i++) {
+        rbtResults = rbt.find(query);
+    }
+    auto rbtSearchEnd = high_resolution_clock::now();
+
+    auto hashBuildTime = duration_cast<milliseconds>(hashBuildEnd - hashBuildStart).count();
+    auto rbtBuildTime = duration_cast<milliseconds>(rbtBuildEnd - rbtBuildStart).count();
+
+    auto hashTotalSearchTime = duration_cast<nanoseconds>(hashSearchEnd - hashSearchStart).count();
+    auto rbtTotalSearchTime = duration_cast<nanoseconds>(rbtSearchEnd - rbtSearchStart).count();
+
+    double hashAverageSearchTime = static_cast<double>(hashTotalSearchTime) / repetitions;
+    double rbtAverageSearchTime = static_cast<double>(rbtTotalSearchTime) / repetitions;
+
+    cout << "=== Repeated Lookup Comparison ===\n";
+    cout << "Dataset: # of rows loaded from dataset: " << foods.size() << endl;
+    cout << "RBT: # of nodes: " << rbt.size() << endl;
+    cout << "Hashtable: # of unique names: " << hashTable.size() << endl;
+    cout << "Hashtable: # of buckets: " << hashTable.bucket_count() << endl;
+    cout << "Exact query: " << query << "\n";
+    cout << "Repetitions: " << repetitions << "\n\n";
+
+    cout << "--- Build Times ---\n";
+    cout << "Hash Table build time: " << hashBuildTime << " ms\n";
+    cout << "Red-Black Tree build time: " << rbtBuildTime << " ms\n\n";
+
+    cout << "--- Repeated Search Times ---\n";
+    cout << "Hash Table total search time: " << hashTotalSearchTime << " ns\n";
+    cout << "Red-Black Tree total search time: " << rbtTotalSearchTime << " ns\n\n";
+
+    cout << "--- Average Search Times ---\n";
+    cout << "Hash Table average search time: " << hashAverageSearchTime << " ns\n";
+    cout << "Red-Black Tree average search time: " << rbtAverageSearchTime << " ns\n\n";
+
+    cout << "--- Match Counts ---\n";
+    cout << "Hash Table matches found: " << hashResults.size() << "\n";
+    cout << "Red-Black Tree matches found: " << rbtResults.size() << "\n\n";
+
+    if (hashAverageSearchTime < rbtAverageSearchTime) {
+        cout << "Hash Table was faster on average for repeated exact lookups.\n";
+    }
+    else if (rbtAverageSearchTime < hashAverageSearchTime) {
+        cout << "Red-Black Tree was faster on average for repeated exact lookups.\n";
+    }
+    else {
+        cout << "Both structures had the same average search time.\n";
+    }
+}
+
 void runCLI(vector<FoodItem>& foods, HashTable& ht, RBT& rbt) {
     int choice = 0;
 
-    while (choice != 8) {
+    while (choice != 9) {
         displayMenu();
         cin >> choice;
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -432,6 +517,9 @@ void runCLI(vector<FoodItem>& foods, HashTable& ht, RBT& rbt) {
             compareDataStructures(foods);
         }
         else if (choice == 8) {
+            compareRepeatedLookups(foods);
+        }
+        else if (choice == 9) {
             cout << "Goodbye\n";
         }
         else {

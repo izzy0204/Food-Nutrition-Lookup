@@ -1,6 +1,8 @@
 #include <iostream>
 #include "Parser.h"
 #include "CLI.h"
+#include "HashTable.h"
+#include "RBT.h"
 using namespace std;
 
 int main() {
