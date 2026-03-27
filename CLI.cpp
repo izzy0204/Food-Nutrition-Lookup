@@ -54,13 +54,13 @@ void searchByName(HashTable& ht, RBT& rbt) {
     vector<const FoodItem*> rbtResults = rbt.find(query);
     auto rbtEnd = high_resolution_clock::now();
 
-    auto hashSearchTime = duration_cast<nanoseconds>(hashEnd - hashStart).count();
-    auto rbtSearchTime = duration_cast<nanoseconds>(rbtEnd - rbtStart).count();
+    auto hashSearchTime = duration_cast<microseconds>(hashEnd - hashStart).count();
+    auto rbtSearchTime = duration_cast<microseconds>(rbtEnd - rbtStart).count();
 
     cout << "=== Name Search Comparison in RBT and HashTable ===\n";
     cout << "Exact Query: " << query << "\n";
-    cout << "HashTable search time: " << hashSearchTime << " nanoseconds.\n";
-    cout << "Red-Black Tree search time: " << rbtSearchTime << " nanoseconds.\n";
+    cout << "HashTable search time: " << hashSearchTime << " microseconds.\n";
+    cout << "Red-Black Tree search time: " << rbtSearchTime << " microseconds.\n";
     cout << " " << endl;
     cout << "HashTable matches: " << hashResults.size() << "\n";
     cout << "Red-Black Tree matches: " << rbtResults.size() << "\n";
@@ -375,12 +375,12 @@ void compareDataStructures(const vector<FoodItem>& foods) {
     vector<const FoodItem*> rbtResults = rbt.find(query);
     auto rbtSearchEnd = high_resolution_clock::now();
 
-    auto hashBuildTime = duration_cast<milliseconds>(hashBuildEnd - hashBuildStart).count();
-    auto rbtBuildTime = duration_cast<milliseconds>(rbtBuildEnd - rbtBuildStart).count();
+    auto hashBuildTime = duration_cast<microseconds>(hashBuildEnd - hashBuildStart).count();
+    auto rbtBuildTime = duration_cast<microseconds>(rbtBuildEnd - rbtBuildStart).count();
 
-    //nanoseconds needs to be used. milliseconds will end up showing 0 for both.
-    auto hashSearchTime = duration_cast<nanoseconds>(hashSearchEnd - hashSearchStart).count();
-    auto rbtSearchTime = duration_cast<nanoseconds>(rbtSearchEnd - rbtSearchStart).count();
+    //nanoseconds needs to be used. microseconds will end up showing 0 for both.
+    auto hashSearchTime = duration_cast<microseconds>(hashSearchEnd - hashSearchStart).count();
+    auto rbtSearchTime = duration_cast<microseconds>(rbtSearchEnd - rbtSearchStart).count();
 
     cout << "=== Data Structure Comparison ===\n";
     cout << "Dataset: # of rows loaded from dataset: " << foods.size() << endl;
@@ -390,12 +390,12 @@ void compareDataStructures(const vector<FoodItem>& foods) {
     cout << "Exact query: " << query << "\n";
 
     cout << "--- Build Times --- \n";
-    cout << "Hash Table build time: " << hashBuildTime << " ms\n";
-    cout << "Red-Black Tree build time: " << rbtBuildTime << " ms\n" << endl;
+    cout << "Hash Table build time: " << hashBuildTime << " microseconds\n";
+    cout << "Red-Black Tree build time: " << rbtBuildTime << " microseconds\n" << endl;
 
     cout << "--- Search Times --- \n";
-    cout << "Hash Table search time: " << hashSearchTime << " ns\n";
-    cout << "Red-Black Tree search time: " << rbtSearchTime << " ns\n" << endl;
+    cout << "Hash Table search time: " << hashSearchTime << " microseconds\n";
+    cout << "Red-Black Tree search time: " << rbtSearchTime << " microseconds\n" << endl;
 
     cout << "--- Match Counts ---\n";
     cout << "Hash Table matches found: " << hashResults.size() << "\n";
@@ -442,11 +442,11 @@ void compareRepeatedLookups(const vector<FoodItem>& foods) {
     }
     auto rbtSearchEnd = high_resolution_clock::now();
 
-    auto hashBuildTime = duration_cast<milliseconds>(hashBuildEnd - hashBuildStart).count();
-    auto rbtBuildTime = duration_cast<milliseconds>(rbtBuildEnd - rbtBuildStart).count();
+    auto hashBuildTime = duration_cast<microseconds>(hashBuildEnd - hashBuildStart).count();
+    auto rbtBuildTime = duration_cast<microseconds>(rbtBuildEnd - rbtBuildStart).count();
 
-    auto hashTotalSearchTime = duration_cast<nanoseconds>(hashSearchEnd - hashSearchStart).count();
-    auto rbtTotalSearchTime = duration_cast<nanoseconds>(rbtSearchEnd - rbtSearchStart).count();
+    auto hashTotalSearchTime = duration_cast<microseconds>(hashSearchEnd - hashSearchStart).count();
+    auto rbtTotalSearchTime = duration_cast<microseconds>(rbtSearchEnd - rbtSearchStart).count();
 
     double hashAverageSearchTime = static_cast<double>(hashTotalSearchTime) / repetitions;
     double rbtAverageSearchTime = static_cast<double>(rbtTotalSearchTime) / repetitions;
@@ -460,16 +460,16 @@ void compareRepeatedLookups(const vector<FoodItem>& foods) {
     cout << "Repetitions: " << repetitions << "\n\n";
 
     cout << "--- Build Times ---\n";
-    cout << "Hash Table build time: " << hashBuildTime << " ms\n";
-    cout << "Red-Black Tree build time: " << rbtBuildTime << " ms\n\n";
+    cout << "Hash Table build time: " << hashBuildTime << " microseconds\n";
+    cout << "Red-Black Tree build time: " << rbtBuildTime << " microseconds\n\n";
 
     cout << "--- Repeated Search Times ---\n";
-    cout << "Hash Table total search time: " << hashTotalSearchTime << " ns\n";
-    cout << "Red-Black Tree total search time: " << rbtTotalSearchTime << " ns\n\n";
+    cout << "Hash Table total search time: " << hashTotalSearchTime << " microseconds\n";
+    cout << "Red-Black Tree total search time: " << rbtTotalSearchTime << " microseconds\n\n";
 
     cout << "--- Average Search Times ---\n";
-    cout << "Hash Table average search time: " << hashAverageSearchTime << " ns\n";
-    cout << "Red-Black Tree average search time: " << rbtAverageSearchTime << " ns\n\n";
+    cout << "Hash Table average search time: " << hashAverageSearchTime << " microseconds\n";
+    cout << "Red-Black Tree average search time: " << rbtAverageSearchTime << " microseconds\n\n";
 
     cout << "--- Match Counts ---\n";
     cout << "Hash Table matches found: " << hashResults.size() << "\n";
